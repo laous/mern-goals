@@ -3,25 +3,28 @@ const { getGoals, deleteGoal, updateGoal, setGoal } = require('../controllers/go
 
 const router = express.Router()
 
+// protect goals 
+const {protect} = require('../middleware/authMiddleware')
+
 // GET request 
-router.get('/' ,
+router.get('/' , protect ,
     getGoals
 )
 
 // POST request
-router.post('/' ,
+router.post('/' , protect ,
         setGoal
 
 )
 
 // PUT request
-router.put('/:id' ,
+router.put('/:id' , protect ,
         updateGoal
     
 )
 
 // DELETE request
-router.delete('/:id' ,
+router.delete('/:id' , protect ,
         deleteGoal
     
 )

@@ -3,12 +3,14 @@ const asycnHandler = require('express-async-handler')
 
 // get Goal Schema
 const Goal = require('../models/goalModel')
+//get User schema
+const User = require('../models/userModel')
 
 // @desc Get Goals
 // @roue GET /api/goals
 // access PRIVATE
 const getGoals =asycnHandler(async (req, res) => {
-    const goals = await Goal.find()
+    const goals = await Goal.find({user: req.user.id})
     res.status(200).json(goals)
 
 })
@@ -24,7 +26,8 @@ const setGoal =asycnHandler( async (req, res) => {
 
     const goal = await Goal.create(
         {
-            text:req.body.text
+            text:req.body.text,
+            user:req.user.id
         }
     )
     res.status(200).json(goal)
@@ -41,6 +44,20 @@ const updateGoal =asycnHandler(async (req, res) => {
         res.status(400)
         throw new Error("Goal not found")
     }
+
+    //check user 
+    const user  = await User.findById(req.user.id)
+     if(!user){
+        res.status(400)
+        throw new Error("User not found")
+     }
+
+    // make sure its the same user 
+    if(goal.user.toString() !== user.id){
+        res.status(400)
+        throw new Error("User not authorized")
+    }
+
 
     // (id , new updates , create new one if not found)
     const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {new:true})
@@ -59,6 +76,19 @@ const deleteGoal = asycnHandler(async(req, res) => {
         res.status(400)
         throw new Error("Goal not found")
     }
+
+        //check user 
+        const user  = await User.findById(req.user.id)
+        if(!user){
+           res.status(400)
+           throw new Error("User not found")
+        }
+   
+       // make sure its the same user 
+       if(goal.user.toString() !== user.id){
+           res.status(400)
+           throw new Error("User not authorized")
+       }
 
     // (id , new updates)
     const deletedGoal = await Goal.findByIdAndDelete(req.params.id, req.body)
