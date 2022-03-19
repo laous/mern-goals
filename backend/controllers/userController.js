@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 
 // passing route excepion to error handler middleware
 const asycnHandler = require('express-async-handler')
-const generateToken = require('../../helpers/generateToken')
+const generateToken = require('../helpers/generateToken')
 
 // get User Schema
 const User = require('../models/userModel')
