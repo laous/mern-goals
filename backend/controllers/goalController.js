@@ -60,7 +60,7 @@ const deleteGoal = asycnHandler(async(req, res) => {
         throw new Error("Goal not found")
     }
 
-    // (id , new updates , create new one if not found)
+    // (id , new updates)
     const deletedGoal = await Goal.findByIdAndDelete(req.params.id, req.body)
 
     res.status(200).json(deletedGoal)
