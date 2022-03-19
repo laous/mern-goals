@@ -2,9 +2,18 @@ console.log("Hello")
 
 const express = require('express')
 const { errorHandler } = require('./middleware/errorMiddleware')
+// for accessing environement varibales
 const dotenv = require('dotenv').config()
 
+// port number
 const port = process.env.PORT || 5000
+
+// coloring the console's output
+const colors = require('colors')
+
+// get db connection 
+const connectDB = require('./config/db')
+connectDB()
 
 //start app
 const app = express()
