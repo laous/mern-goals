@@ -1,17 +1,15 @@
-
+// passing route excepion to error handler middleware
 const asycnHandler = require('express-async-handler')
+
+// get Goal Schema
+const Goal = require('../models/goalModel')
 
 // @desc Get Goals
 // @roue GET /api/goals
 // access PRIVATE
 const getGoals =asycnHandler(async (req, res) => {
-
-    if(!req.body.text){
-        res.status(400)
-        throw new Error('Please add some text')
-    }
-    console.log(req.body.text)
-    res.status(200).json({message: "get goals"})
+    const goals = await Goal.find()
+    res.status(200).json(goals)
 
 })
 
@@ -19,7 +17,17 @@ const getGoals =asycnHandler(async (req, res) => {
 // @roue POST /api/goals
 // access PRIVATE
 const setGoal =asycnHandler( async (req, res) => {
-    res.status(200).json({message: "create goal"})
+    if(!req.body.text){
+        res.status(400)
+        throw new Error("Please add some text!")
+    }
+
+    const goal = await Goal.create(
+        {
+            text:req.body.text
+        }
+    )
+    res.status(200).json(goal)
 })
 
 
@@ -27,7 +35,17 @@ const setGoal =asycnHandler( async (req, res) => {
 // @roue PUT /api/goals/:id
 // access PRIVATE
 const updateGoal =asycnHandler(async (req, res) => {
-    res.status(200).json({message: `update goal ${req.params.id}`})
+    const goal = await Goal.findById(req.params.id)
+
+    if(!goal) {
+        res.status(400)
+        throw new Error("Goal not found")
+    }
+
+    // (id , new updates , create new one if not found)
+    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {new:true})
+
+    res.status(200).json(updatedGoal)
 })
 
 
@@ -35,7 +53,17 @@ const updateGoal =asycnHandler(async (req, res) => {
 // @roue DELETE /api/goals/:id
 // access PRIVATE
 const deleteGoal = asycnHandler(async(req, res) => {
-    res.status(200).json({message: `delete goal ${req.params.id}`})
+    const goal = await Goal.findById(req.params.id)
+
+    if(!goal) {
+        res.status(400)
+        throw new Error("Goal not found")
+    }
+
+    // (id , new updates , create new one if not found)
+    const deletedGoal = await Goal.findByIdAndDelete(req.params.id, req.body)
+
+    res.status(200).json(deletedGoal)
 })
 
 
