@@ -3,6 +3,9 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   return (
@@ -16,7 +19,9 @@ function App() {
             <Route path="" element={<Dashboard />} />
           </Route>
         </Routes>
+        <ToastContainer />
       </div>
+
     </BrowserRouter>
   );
 }
