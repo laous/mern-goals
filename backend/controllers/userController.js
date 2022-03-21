@@ -44,7 +44,7 @@ const registerUser =  asycnHandler(async (req,res) => {
             email:createdUser.email,
             token : generateToken(createdUser._id)
         })
-    }else {
+    } else {
         res.status(400)
         throw new Error("User not created")
     }

@@ -27,8 +27,9 @@ app.listen(
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 /* custom error handler */
-app.use(errorHandler)
 
 // routes
 app.use('/api/goals' ,require('./routes/goalRoutes'))
 app.use('/api/users' ,require('./routes/userRoutes'))
+
+app.use(errorHandler)

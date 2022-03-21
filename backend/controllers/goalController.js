@@ -12,7 +12,6 @@ const User = require('../models/userModel')
 const getGoals =asycnHandler(async (req, res) => {
     const goals = await Goal.find({user: req.user.id})
     res.status(200).json(goals)
-
 })
 
 // @desc Set Goal
@@ -45,15 +44,13 @@ const updateGoal =asycnHandler(async (req, res) => {
         throw new Error("Goal not found")
     }
 
-    //check user 
-    const user  = await User.findById(req.user.id)
-     if(!user){
-        res.status(400)
-        throw new Error("User not found")
-     }
+    if(!req.user){
+    res.status(400)
+    throw new Error("User not found")
+    }
 
     // make sure its the same user 
-    if(goal.user.toString() !== user.id){
+    if(goal.user.toString() !== req.user.id){
         res.status(400)
         throw new Error("User not authorized")
     }
@@ -77,18 +74,16 @@ const deleteGoal = asycnHandler(async(req, res) => {
         throw new Error("Goal not found")
     }
 
-        //check user 
-        const user  = await User.findById(req.user.id)
-        if(!user){
-           res.status(400)
-           throw new Error("User not found")
-        }
-   
-       // make sure its the same user 
-       if(goal.user.toString() !== user.id){
-           res.status(400)
-           throw new Error("User not authorized")
-       }
+    if(!req.user){
+        res.status(400)
+        throw new Error("User not found")
+    }
+
+    // make sure its the same user 
+    if(goal.user.toString() !== req.user.id){
+        res.status(400)
+        throw new Error("User not authorized")
+    }
 
     // (id , new updates)
     const deletedGoal = await Goal.findByIdAndDelete(req.params.id, req.body)
