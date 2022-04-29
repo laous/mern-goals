@@ -3,8 +3,6 @@ const asycnHandler = require('express-async-handler')
 
 // get Goal Schema
 const Goal = require('../models/goalModel')
-//get User schema
-const User = require('../models/userModel')
 
 // @desc Get Goals
 // @roue GET /api/goals
